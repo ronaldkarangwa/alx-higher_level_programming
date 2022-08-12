@@ -1,74 +1,54 @@
 #!/usr/bin/python3
-"""
-    contains class Square implements class Rectangle
-"""
-from models.rectangle import Rectangle
+""" Program that defines a Square in base from Rectangle """
+from . rectangle import Rectangle
 
 
 class Square(Rectangle):
-    """
-        Square implements rectangle
-    """
+    """ class Square that inherits from Rectangle """
     def __init__(self, size, x=0, y=0, id=None):
-        """
-            initialises Square (overrides Rectangle init)
-        """
+        """ Constructor """
         super().__init__(size, size, x, y, id)
 
     @property
     def size(self):
-        """
-            returns the size of the square
-        """
-        return self.width
+        """ Retriebe the size of square """
+        return (self.width)
 
     @size.setter
     def size(self, value):
-        """
-            sets the value of size
-        """
-        if type(value) != int:
-            raise TypeError("width must be an integer")
-        if value <= 0:
-            raise ValueError("width must be > 0")
-
+        """ set passet private attribute of size """
         self.width = value
         self.height = value
 
-    def update(self, *args, **kwargs):
-        """
-            assigns key/value argument to attributes
-            kwargs is skipped if args is not empty
-            Args:
-                *args -  variable number of no-keyword args
-                **kwargs - variable number of keyworded args
-        """
-        if len(args) == 0:
-            for key, val in kwargs.items():
-                self.__setattr__(key, val)
-            return
-
-        try:
-            self.id = args[0]
-            self.size = args[1]
-            self.x = args[2]
-            self.y = args[3]
-        except IndexError:
-            pass
-
     def __str__(self):
-        """
-            Overloading str function
-        """
-        return "[{}] ({}) {}/{} - {}".format(type(self).__name__,
-                                             self.id, self.x, self.y,
-                                             self.width)
+        """ overriding the __str__ method that returns a custom string """
+        mssg = "[Square] ({:d}) {:d}/{:d} - {:d}"\
+            .format(self.id, self.x, self.y, self.width)
+        return (mssg)
+
+    def update(self, *args, **kwargs):
+        """ Method that assigns an argument to each attribute
+        by Non-keyword and key/value"""
+        arlist = ["id", "size", "x", "y"]
+        if (args and len(args) != 0):
+            for arl in range(len(args)):
+                if (arl == 0):
+                    super().update(args[arl])
+                elif (arl < len(arlist)):
+                    setattr(self, arlist[arl], args[arl])
+        else:
+            for key, value in kwargs.items():
+                if (key == 'id'):
+                    super().update(value)
+                else:
+                    setattr(self, key, value)
 
     def to_dictionary(self):
-        """
-            Returns the dictionary representation of a Square
-        """
-        return {'id': getattr(self, "id"),
-                'size': getattr(self, "width"),
-                'x': getattr(self, "x"),
-                'y': getattr(self, "y")}
+        """ returns the dictionary representation of a Square """
+        my_dict = {
+            'id': self.id,
+            'size': self.size,
+            'x': self.x,
+            'y': self.y
+        }
+        return (my_dict)
